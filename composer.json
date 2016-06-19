@@ -1,0 +1,28 @@
+{
+  "name": "eureka/component-string",
+  "description": "PHP string library.",
+  "type": "library",
+  "license": "MIT",
+
+  "authors": [
+    {
+      "name": "Romain Cottard",
+      "email": "",
+      "role": "Developer"
+    }
+
+  ],
+
+  "autoload": {
+    "psr-4": {
+      "Eureka\\Component\\String": "./"
+    }
+  },
+
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/velkuns/component-string"
+    }
+  ]
+}
