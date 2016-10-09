@@ -13,51 +13,59 @@ namespace Eureka\Component\String;
  * String class to manage string.
  *
  * @author Romain Cottard
- * @version 2.1.0
  */
-class String
+class Strings
 {
-
     /**
-     * String to manipulate
-     * @var string $string
+     * @var string $string String to manipulate
      */
     protected $string = '';
 
     /**
-     * If we use mbstring php extension.
-     * @var unknown
+     * @var null|bool If we use mbstring php extension.
      */
     protected static $useMbstring = null;
 
     /**
-     * List of function (standard / mb_string extention)
-     * @var array $functions
+     * @var array $functions List of function (standard / mb_string extention)
      */
     protected static $functions = array(
 
         //~ Without mb_string functions
-        0 => array('strlen' => 'strlen','strpos' => 'strpos','substr' => 'substr','truncate' => 'truncate','strtolower' => 'strtolower','strtoupper' => 'strtoupper'),
+        0 => array(
+            'strlen'     => 'strlen', 'strpos' => 'strpos', 'substr' => 'substr', 'truncate' => 'truncate',
+            'strtolower' => 'strtolower', 'strtoupper' => 'strtoupper',
+        ),
 
         //~ With mb_string functions
-        1 => array('strlen' => 'mb_strlen','strpos' => 'mb_strpos','substr' => 'mb_substr','truncate' => 'mb_truncate','strtolower' => 'mb_strtolower','strtoupper' => 'mb_strtoupper'));
+        1 => array(
+            'strlen'     => 'mb_strlen', 'strpos' => 'mb_strpos', 'substr' => 'mb_substr', 'truncate' => 'mb_truncate',
+            'strtolower' => 'mb_strtolower', 'strtoupper' => 'mb_strtoupper',
+        ),
+    );
 
     /**
-     * List of characters mapping.
-     * @var array $charMapping
+     * @var array $charMapping List of characters mapping.
      */
-    protected static $charMapping = array('À' => 'a','Á' => 'a','Ä' => 'a','Å' => 'a','Ç' => 'c','È' => 'e','É' => 'e','Ê' => 'e','Ë' => 'e','Ì' => 'i','Í' => 'i','Î' => 'i','Ï' => 'i','Ñ' => 'n','Ò' => 'o','Ó' => 'o','Ô' => 'o','Õ' => 'o','Ö' => 'o','Ø' => 'o','Ù' => 'u','Ú' => 'u','Û' => 'u','Ü' => 'u','Ý' => 'y','à' => 'a','á' => 'a','â' => 'a','ã' => 'a','ä' => 'a','å' => 'a','ç' => 'c','è' => 'e','é' => 'e','ê' => 'e','ë' => 'e','ì' => 'i','í' => 'i','î' => 'i','ï' => 'i','ñ' => 'n','ò' => 'o','ó' => 'o','ô' => 'o','õ' => 'o','ö' => 'o','ø' => 'o','ù' => 'u','ú' => 'u','û' => 'u','ü' => 'u','ý' => 'y','ÿ' => 'y','@' => 'a','Œ' => 'oe','œ' => 'oe','Æ' => 'ae','æ' => 'ae');
+    protected static $charMapping = array(
+        'À' => 'a', 'Á' => 'a', 'Ä' => 'a', 'Å' => 'a', 'Ç' => 'c', 'È' => 'e', 'É' => 'e', 'Ê' => 'e', 'Ë' => 'e',
+        'Ì' => 'i', 'Í' => 'i', 'Î' => 'i', 'Ï' => 'i', 'Ñ' => 'n', 'Ò' => 'o', 'Ó' => 'o', 'Ô' => 'o', 'Õ' => 'o',
+        'Ö' => 'o', 'Ø' => 'o', 'Ù' => 'u', 'Ú' => 'u', 'Û' => 'u', 'Ü' => 'u', 'Ý' => 'y', 'à' => 'a', 'á' => 'a',
+        'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'ç' => 'c', 'è' => 'e', 'é' => 'e', 'ê' => 'e', 'ë' => 'e',
+        'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o',
+        'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ü' => 'u', 'ý' => 'y', 'ÿ' => 'y', '@' => 'a',
+        'Œ' => 'oe', 'œ' => 'oe', 'Æ' => 'ae', 'æ' => 'ae',
+    );
 
     /**
-     * List of characters mapping.
-     * @var array $charMapping
+     * @var array $charMapping List of characters mapping.
      */
-    protected static $charStrip = array("'" => '-',' ' => '-','.' => '-');
+    protected static $charStrip = array("'" => '-', ' ' => '-', '.' => '-');
 
     /**
      * Class constructor.
+     *
      * @param string $string
-     * @return String Class instance.
      */
     public function __construct($string = '')
     {
@@ -69,7 +77,7 @@ class String
 
         if (static::$useMbstring) {
 
-            mb_detect_order(array('UTF-8','ASCII'));
+            mb_detect_order(array('UTF-8', 'ASCII'));
             $encoding = mb_detect_encoding($this->string);
 
             if ($encoding !== false) {
@@ -91,9 +99,7 @@ class String
     /**
      * Strlen function. Use mbstring extension if loaded.
      *
-     * @param  string $string String to count chars.
      * @return integer Nb chars.
-     * @access public
      */
     public function length()
     {
@@ -105,10 +111,9 @@ class String
     /**
      * Strpos function. Use mbstring extension if loaded.
      *
-     * @param  string  $haystack The string being checked.
-     * @param  string  $needle   The string to find in haystack.
-     * @param  integer $offset   The search offset. If it is not specified, 0 is used.
-     * @return mixed   False if not found, else position.
+     * @param  string $needle The string to find in haystack.
+     * @param  int    $offset The search offset. If it is not specified, 0 is used.
+     * @return mixed False if not found, else position.
      */
     public function strpos($needle, $offset = 0)
     {
@@ -120,22 +125,21 @@ class String
     /**
      * Substring function. Use mbstring extension if loaded.
      *
-     * @param  string  $string String to 'truncate'.
      * @param  integer $start
      * @param  integer $length
-     * @return String  Part of string.
+     * @return Strings  Part of string.
      */
     public function substr($start = 0, $length = null)
     {
         $function = static::$functions[(int) static::$useMbstring]['substr'];
 
-        return new String($function($this->string, $start, $length));
+        return new self($function($this->string, $start, $length));
     }
 
     /**
      * Set string to lower case
      *
-     * @return String
+     * @return self
      */
     public function toLower()
     {
@@ -149,7 +153,7 @@ class String
     /**
      * Set string to upper case
      *
-     * @return String
+     * @return self
      */
     public function toUpper()
     {
@@ -162,8 +166,9 @@ class String
 
     /**
      * Trim string
-     * @param string $chars List of chars to trim.
-     * @return String
+     *
+     * @param  string $chars List of chars to trim.
+     * @return self
      */
     public function trim($chars = " \t\n\r\0\x0B")
     {
@@ -175,18 +180,19 @@ class String
     /**
      * Replace '&' by '&amp;'
      *
-     * @param    string $string String to encode.
-     * @return   string  Encoded string.
+     * @return self
      */
     public function amp()
     {
-        $this->replace('&amp;', '&')->replace('&', '&amp;');
+        $this->replace('&amp;', '&')
+            ->replace('&', '&amp;');
 
         return $this;
     }
 
     /**
      * Get char at index
+     *
      * @param integer $index
      * @return string
      */
@@ -197,7 +203,7 @@ class String
 
     /**
      * Get char at index
-     * @param integer $index
+     *
      * @return string
      */
     public function getRandomChar()
@@ -208,8 +214,7 @@ class String
     /**
      * Check if string is an email.
      *
-     * @param    string $string String to encode.
-     * @return   string  Encoded string.
+     * @return bool
      */
     public function isEmail()
     {
@@ -219,8 +224,7 @@ class String
     /**
      * Strip string and remove accent and non basic characters.
      *
-     * @param    string $string
-     * @return   String
+     * @return self
      */
     public function strip()
     {
@@ -228,7 +232,7 @@ class String
             ->trim()
             ->toLower()
             ->replace(array_keys(static::$charStrip), array_values(static::$charStrip))
-            ->pregReplace(array('#[^a-z0-9-]#S','#-+#S'), array('','-'));
+            ->pregReplace(array('#[^a-z0-9-]#S', '#-+#S'), array('', '-'));
 
         return $this;
     }
@@ -236,7 +240,7 @@ class String
     /**
      * Convert string with accent to same string with no accent.
      *
-     * @return String
+     * @return self
      */
     public function noAccent()
     {
@@ -248,8 +252,9 @@ class String
     /**
      * Decode html string into string
      *
-     * @param integer $type
-     * @param string $encode
+     * @param  integer $type
+     * @param  string  $encode
+     * @return self
      */
     public function htmld($type = ENT_COMPAT, $encode = 'UTF-8')
     {
@@ -261,8 +266,9 @@ class String
     /**
      * Encode string into html string.
      *
-     * @param integer $type
-     * @param string $encode
+     * @param  int    $type
+     * @param  string $encode
+     * @return self
      */
     public function htmle($type = ENT_COMPAT, $encode = 'UTF-8')
     {
@@ -274,7 +280,8 @@ class String
     /**
      * Decode html string into string
      *
-     * @param integer $type
+     * @param  int $type
+     * @return self
      */
     public function htmlsd($type = ENT_COMPAT)
     {
@@ -286,8 +293,9 @@ class String
     /**
      * Encode string into html string.
      *
-     * @param integer $type
-     * @param string $encode
+     * @param  int    $type
+     * @param  string $encode
+     * @return self
      */
     public function htmlse($type = ENT_COMPAT, $encode = 'UTF-8')
     {
@@ -298,8 +306,10 @@ class String
 
     /**
      * Concat string with current string.
-     * @param string $string String to concat
-     * @param boolean $prepend Boolean
+     *
+     * @param  string $string String to concat
+     * @param  bool   $prepend Boolean
+     * @return self
      */
     public function concat($string, $prepend = false)
     {
@@ -311,11 +321,11 @@ class String
     /**
      * Preg replace text in string.
      *
-     * @param string $pattern
-     * @param string $replace
-     * @param integer $limit
-     * @param integer $count
-     * @return String
+     * @param  string $pattern
+     * @param  string $replace
+     * @param  int    $limit
+     * @param  int    $count
+     * @return self
      */
     public function pregReplace($pattern, $replace, $limit = -1, &$count = null)
     {
@@ -327,10 +337,10 @@ class String
     /**
      * Replace text in string.
      *
-     * @param string|array $search
-     * @param string|array $replace
-     * @param integer $count
-     * @return String
+     * @param  string|array $search
+     * @param  string|array $replace
+     * @param  int          $count
+     * @return self
      */
     public function replace($search, $replace, &$count = null)
     {
@@ -342,10 +352,10 @@ class String
     /**
      * Truncate text after x chars (and add suffix, like '...')
      *
-     * @param    integer $length
-     * @param    string  $suffix
-     * @param    boolean $lastSpace
-     * @return   String  Truncated string.
+     * @param  int    $length
+     * @param  string $suffix
+     * @param  bool   $lastSpace
+     * @return Strings  Truncated string.
      */
     public function truncate($length = 30, $suffix = '', $lastSpace = false)
     {
@@ -368,14 +378,14 @@ class String
     /**
      * Generate code
      *
-     * @param    integer $nbChars Nb characters in code.
-     * @return   String
+     * @param  int $nbChars Nb characters in code.
+     * @return Strings
      */
     public function gencode($nbChars = 8)
     {
-        $chars = new String('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+        $chars = new self('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
 
-        for ($index = 0; $index < $nbChars; $index ++) {
+        for ($index = 0; $index < $nbChars; $index++) {
             $this->string .= $chars->getRandomChar();
         }
 
