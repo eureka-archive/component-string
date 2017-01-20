@@ -218,7 +218,43 @@ class Strings
      */
     public function isEmail()
     {
-        return (bool) preg_match('`^[A-Z0-9]+[A-Z0-9._%+-]*@[A-Z0-9.-]+\.[A-Z]{2,}$`i', $this->string);
+        return filter_var($this->string, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * Check if string is an email.
+     *
+     * @return bool
+     */
+    public function isPhone()
+    {
+        $phone = clone $this;
+
+        return (bool) preg_match('`\+?[0-9()]{8,}`', (string) $phone->cleanPhone());
+    }
+
+    /**
+     * Clean string tags into string.
+     *
+     * @return self
+     */
+    public function cleanHtml()
+    {
+        $this->string = strip_tags($this->string);
+
+        return $this;
+    }
+
+    /**
+     * Clean string as a phone number.
+     *
+     * @return self
+     */
+    public function cleanPhone()
+    {
+        $this->string = preg_replace('`[^0-9+()]?`', '', $this->string);
+
+        return $this;
     }
 
     /**
@@ -357,7 +393,7 @@ class Strings
      * @param  bool   $lastSpace
      * @return Strings  Truncated string.
      */
-    public function truncate($length = 30, $suffix = '', $lastSpace = false)
+    public function truncate($length = 30, $suffix = '...', $lastSpace = true)
     {
         $string = clone $this;
         $string->htmld();
