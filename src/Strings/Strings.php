@@ -230,7 +230,7 @@ class Strings
     {
         $phone = clone $this;
 
-        return (bool) preg_match('`\+?[0-9()]{8,}`', (string) $phone->cleanPhone());
+        return (bool) preg_match('`^[+]?[0-9]{0,3}[0-9()]{0,3}[0-9]{9,10}$`', (string) $phone->cleanPhone());
     }
 
     /**
